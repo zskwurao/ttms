@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zsk.dao.ScheduleMapper">
+    <resultMap id="ScheduleMap" type="com.zsk.pojo.Schedule">
+        <id column="sched_id" property="sched_id"/>
+        <result column="sched_time" property="sched_time"/>
+        <result column="sched_ticket_price" property="sched_ticket_price"/>
+        <association property="studio" column="studio_id" select="com.zsk.dao.StudioMapper.selectById"/>
+        <association property="play" column="play_id" select="com.zsk.dao.PlayMapper.selectById"/>
+        <association property="list" column="sched_id" select="com.zsk.dao.TicketMapper.selectListById"/>
+    </resultMap>
+    <insert id="addSchedule" parameterType="Schedule">
+        <selectKey keyProperty="sched_id" resultType="Integer" order="AFTER">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into schedule VALUES (null,#{studio_id},#{play_id},#{sched_time},#{sched_ticket_price})
+    </insert>
+    <select id="pageQuery" resultMap="ScheduleMap" >
+        SELECT * from schedule
+    </select>
+    <select id="getScheduleBystudio" resultType="Schedule" parameterType="Integer">
+        select * from schedule where studio_id = #{id};
+    </select>
+
+    <select id="count" resultType="Long">
+        SELECT COUNT(*) FROM schedule
+    </select>
+    <select id="selectListByPlayId" parameterType="Integer" resultType="Schedule">
+        SELECT * FROM schedule where play_id = #{play_id}
+    </select>
+    <select id="getSchedule" resultMap="ScheduleMap" parameterType="Integer">
+        select * from schedule where sched_id=#{sched_id}
+    </select>
+    <select id="selectScheduleListByTime" parameterType="Schedule" resultMap="ScheduleMap">
+        select * from schedule where Date(sched_time) = #{sched_time} and play_id =#{play_id};
+    </select>
+
+    <select id="getTime" parameterType="Integer" resultType="String">
+        select distinct Date(sched_time) from schedule where play_id = #{id}
+    </select>
+
+    <delete id="deleteSchedule" parameterType="Integer">
+        delete from schedule where sched_id=#{id}
+    </delete>
+</mapper>

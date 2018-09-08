@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zsk.dao.PlayMapper">
+    <resultMap id="playMap" type="com.zsk.pojo.Play">
+        <id column="play_id" property="play_id"/>
+        <result column="play_type_id" property="play_type_id"/>
+        <result column="play_lang_id" property="play_lang_id"/>
+        <result column="play_name" property="play_name"/>
+        <result column="play_introduction" property="play_introduction"/>
+        <result column="play_image" property="play_image"/>
+        <result column="play_length" property="play_length"/>
+        <result column="play_ticket_price" property="play_ticket_price"/>
+        <result column="play_status" property="play_status"/>
+        <result column="play_director" property="play_director"/>
+        <result column="play_actor" property="play_actor"/>
+        <result column="play_shortintro" property="play_shortintro"/>
+        <association property="scheduleList" column="play_id" select="com.zsk.dao.ScheduleMapper.selectListByPlayId"/>
+        <association property="datadict" column="play_lang_id" select="com.zsk.dao.DictMapper.getDatadictByid"/>
+    </resultMap>
+    <insert id="addPlay" parameterType="Play">
+        insert into play VALUES (null,#{play_type_id},#{play_lang_id},#{play_name},#{play_introduction},
+        #{play_image},#{play_length},#{play_ticket_price},#{play_status},#{play_director},#{play_actor},#{play_shortintro})
+    </insert>
+    <select id="selectById" parameterType="Integer" resultType="Play">
+        SELECT * from play where play_id=#{play_id}
+    </select>
+
+    <select id="selectPlayByName" parameterType="String" resultMap="playMap">
+        SELECT * from play where play_name LIKE concat('%',#{play_name},'%')
+    </select>
+
+    <select id="getListById" parameterType="Integer" resultType="Play">
+        SELECT * from play where play_type_id=#{play_type_id} and play_status = 1
+    </select>
+
+    <select id="pageQuery" resultType="Play" >
+        SELECT * from play
+    </select>
+    <select id="count" resultType="Long">
+        SELECT COUNT(*) FROM play
+    </select>
+    <select id="selectPlay" resultType="Play">
+        SELECT * from play
+    </select>
+
+    <select id="getListBystatus" parameterType="Integer" resultMap="playMap">
+        select * from play where play_status = #{play_status}
+    </select>
+
+    <delete id="deletePlay" parameterType="Integer">
+        delete from play where play_id = #{ids}
+    </delete>
+    <update id="editPlay" parameterType="Play">
+        UPDATE play SET play_type_id=#{play_type_id},play_lang_id=#{play_lang_id},play_name=#{play_name},
+        play_length = #{play_length},play_ticket_price=#{play_ticket_price},play_status=#{play_status},
+        play_director=#{play_director},play_actor=#{play_actor},play_shortintro=#{play_shortintro}
+        where play_id = #{play_id}
+    </update>
+</mapper>

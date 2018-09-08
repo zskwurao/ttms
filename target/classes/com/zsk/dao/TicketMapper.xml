@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zsk.dao.TicketMapper">
+    <resultMap id="ticketMap" type="com.zsk.pojo.Ticket">
+        <id column="ticket_id" property="ticket_id"/>
+        <association property="seat" column="seat_id" select="com.zsk.dao.SeatMapper.selectSeatById"/>
+        <association property="schedule" column="sched_id" select="com.zsk.dao.ScheduleMapper.getSchedule"/>
+    </resultMap>
+    <insert id="addTicket" parameterType="Ticket">
+        insert into ticket values(null,#{seat_id},#{sched_id},#{ticket_price},#{ticket_status},#{ticket_locked_time})
+    </insert>
+    <select id="selectListById" parameterType="Integer" resultType="Ticket">
+        select * from ticket where sched_id =#{id}
+    </select>
+    <select id="selectById" parameterType="Integer" resultMap="ticketMap">
+        select * from ticket where ticket_id =#{id}
+    </select>
+    <update id="updateTicket" parameterType="Integer">
+        update ticket set ticket_status = 1 where ticket_id = #{i}
+    </update>
+
+    <update id="updateStatus" parameterType="Integer">
+        update ticket set ticket_status = 0 where ticket_id = #{i}
+    </update>
+    <select id="getTicketId" parameterType="Integer" resultType="Integer">
+        select ticket_id from ticket where sched_id = #{ssssws} and ticket_status = 1
+    </select>
+</mapper>

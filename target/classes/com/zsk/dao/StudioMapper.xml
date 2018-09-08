@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zsk.dao.StudioMapper">
+    <resultMap id="StudioMap" type="com.zsk.pojo.Studio">
+        <id column="studio_id" property="studio_id"/>
+        <result column="studio_name" property="studio_name"/>
+        <result column="studio_row_count" property="studio_row_count"/>
+        <result column="studio_col_count" property="studio_col_count"/>
+        <result column="studio_introduction" property="studio_introduction"/>
+
+        <association property="seatList" column="studio_id" select="com.zsk.dao.SeatMapper.selectById"/>
+    </resultMap>
+    <insert id="addStudio" parameterType="Studio">
+        INSERT INTO studio VALUES(null,#{studio_name},#{studio_row_count},#{studio_col_count},#{studio_introduction})
+    </insert>
+
+    <select id="count" resultType="Long">
+        SELECT COUNT(*) FROM studio
+    </select>
+    <select id="pageQuery" resultType="Studio">
+        SELECT * FROM studio
+    </select>
+    <select id="getList" resultType="Studio">
+        SELECT * from studio
+    </select>
+    <select id="selectById" parameterType="Integer" resultType="Studio">
+        SELECT * from studio where studio_id = #{id}
+    </select>
+    <select id="selectByName" parameterType="String" resultType="Studio">
+        SELECT * from studio where studio_name=#{name}
+    </select>
+    <delete id="deleteStudio" parameterType="Integer">
+        delete from studio where studio_id = #{id}
+    </delete>
+    <update id="editStudio" parameterType="Studio">
+        UPDATE studio set studio_name=#{studio_name},studio_row_count=#{studio_row_count},studio_col_count=#{studio_col_count},
+        studio_introduction=#{studio_introduction} WHERE studio_id =#{studio_id}
+    </update>
+</mapper>

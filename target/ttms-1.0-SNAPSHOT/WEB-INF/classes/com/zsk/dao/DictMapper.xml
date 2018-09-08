@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zsk.dao.DictMapper">
+    <select id="getDictListById" resultType="Datadict" parameterType="String">
+        select * from data_dict where dict_parent_id=#{dict_id}
+    </select>
+    <select id="getDatadictByid" parameterType="Integer" resultType="Datadict">
+        SELECT * FROM data_dict where dict_id=#{dict_id}
+    </select>
+    <select id="getlistById" parameterType="String" resultType="Datadict">
+        SELECT * from data_dict where dict_parent_id=#{dict_parent_id}
+    </select>
+    <select id="getIdByName" parameterType="String" resultType="Datadict">
+        select * from data_dict where dict_value = #{name}
+    </select>
+</mapper>

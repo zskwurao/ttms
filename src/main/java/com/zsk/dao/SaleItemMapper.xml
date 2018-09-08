@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zsk.dao.SaleItemMapper">
+    <resultMap id="saleItemMap" type="com.zsk.pojo.Saleitem">
+        <association property="ticket" column="ticket_id" select="com.zsk.dao.TicketMapper.selectById"/>
+        <association property="user" column="user_id" select="com.zsk.dao.UserMapper.selectById"/>
+        <association property="play" column="play_id" select="com.zsk.dao.PlayMapper.selectById"/>
+    </resultMap>
+    <insert id="addSaleItem" parameterType="Saleitem">
+        insert into sale_item values (null,#{user.user_id},#{ticket_id},#{play.play_id},#{sale_item_price},#{sale_item_time},#{sale_item_status});
+    </insert>
+    <select id="selectListByUsrId" parameterType="Integer" resultMap="saleItemMap">
+        select * from sale_item where user_id = #{user_id}
+    </select>
+
+    <select id="pageQuery" resultMap="saleItemMap" >
+        SELECT * from sale_item
+    </select>
+    <select id="count" resultType="Long">
+        SELECT COUNT(*) FROM sale_item
+    </select>
+    <select id="selectListByTime" resultType="String" parameterType="String">
+        select play.play_name from sale_item left join play on sale_item.play_id = play.play_id where Date(sale_item_time) = #{sale_item_time} group by sale_item.play_id
+    </select>
+    <select id="sum" resultType="Integer" parameterType="String">
+         select sum(sale_item_price) from sale_item  where Date(sale_item_time) = #{time} group by sale_item.play_id
+    </select>
+
+    <update id="updateStatus" parameterType="Integer">
+        update sale_item set sale_item_status = 0 where ticket_id = #{id}
+    </update>
+</mapper>

@@ -1,0 +1,8 @@
+[
+		{ "id":"11", "pId":"0", "name":"基础数据"},
+		{ "id":"112", "pId":"11", "name":"剧目管理",  "page":"play/play.action"},
+		{ "id":"113", "pId":"11", "name":"演出厅管理","page":"studio/studio.action"},
+		{ "id":"114", "pId":"11", "name":"座位管理", "page":"seat/seat.action"},
+		{ "id":"115", "pId":"11", "name":"演出计划管理","page":"schedule/schedule.action"},
+		{ "id":"116", "pId":"11", "name":"订单信息统计","page":"saleitem/saleitem.action"}
+]
